@@ -1,0 +1,52 @@
+1. Design: N = 2,837 participants for a standard error of 0.0200 (first stage 0.200, lambda 0.20)
+   arms assigned: [2000, 2000, 2000]
+
+2. Data:
+    arm  wrong  flagged
+0    0      1        0
+1    0      1        0
+2    1      0        0
+3    2      1        0
+4    1      0        0
+
+3. FPR = 0.103 (se 0.018, from 300 pre-AI answers)
+
+4. Arms:
+         n  flagged  flagged_se  mean[mean]
+arm                                       
+0    2000   0.3490    0.010658      0.3365
+1    2000   0.1730    0.008458      0.4160
+2    2000   0.1415    0.007794      0.4625
+
+   First stage:
+         drop        se          t
+arms                             
+0-1   0.1760  0.013606  12.935059
+1-2   0.0315  0.011501   2.738878
+
+   Is the middle arm on the line? (homogeneity test)
+                           gap        se   p_value   side
+middle arm category                                     
+1          mean     -0.027372  0.014043  0.051267  below
+
+5. IV design, arms 1 and 2: first stage 0.0315 (se 0.0115), FPR 0.1033, lambda 1.212
+      estimate     se  ci_low  ci_high    anderson_rubin
+mean    0.5188 0.0463  0.4280   0.6096  [0.4423, 0.7397]
+
+   Three methods side by side:
+      no correction           delete flagged         IV design          
+          estimate        se       estimate      se  estimate        se
+mean         0.405  0.006337       0.468222  0.0073  0.518841  0.046327
+
+6. Bounds:
+                          low   high  ci_low  ci_high
+category bound                                      
+mean     (ii) arm 0   0.3406 0.6490  0.3184   0.6774
+         (ii) arm 1   0.4185 0.5059  0.3937   0.5325
+         (ii) arm 2   0.4616 0.5095  0.4363   0.5375
+         (iii) MTR    0.4625    inf  0.4445      inf
+         (iv) MTS     0.5188    inf  0.4382      inf
+         intersection 0.5188 0.5059  0.4658   0.5237
+The estimated bounds cross for ['mean']; read the ci columns there.
+
+Saved examples/contamination_curve.png
