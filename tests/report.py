@@ -18,11 +18,6 @@ print(f"| theta_01 | 0.47 | {th01:.2f} |\n| theta_12 | 0.49 | {th12:.2f} |")
 for name, paper in [("(ii) arm 1", "[0.43, 0.53]"), ("(ii) arm 2", "[0.46, 0.51]"), ("intersection", "[0.49, 0.51]")]:
     lo, hi = b[name]
     print(f"| bound {name} | {paper} | [{lo[0]:.2f}, {hi[0]:.2f}] |")
-y0 = np.r_[np.ones(50), np.zeros(50)]
-w = np.r_[np.ones(25), np.zeros(75)]
-yobs = np.where(w == 1, 0, y0)
-print(f"| Table 1 no correction | 25% | {100 * yobs.mean():.0f}% |")
-print(f"| Table 1 delete, perfect detector | 33% | {100 * yobs[w == 0].mean():.0f}% |")
 
 print("\n## Inference (truth 0.5, homogeneous effect, N = 3,000, 400 surveys)\n")
 hw = ha = 0

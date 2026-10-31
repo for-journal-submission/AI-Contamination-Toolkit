@@ -45,7 +45,7 @@ ac.plot_curve(y, s, z, fpr)
 | Bounds | `bounds` covers bounded outcomes (Manski, needs TPR and a detector that errs at the same rates for every participant and answer), monotone treatment response and monotone treatment selection, plus their intersection and bootstrap confidence bounds. | Theorem 2(ii)–(iv) |
 | AI coding | `human_coding_probs` chooses which answers humans code. `draw_human_coding` draws them. `pseudo_outcome` builds the corrected outcome to pass to `friction_iv`. | Lemma coding |
 | No instrument | `latent_ipw` fits a latent class model and returns IPW weights. It needs at least two questions that AI does not write for the participant (`ai_free`). | Theorem latent |
-| Data | `simulate_batball` gives a simulated survey. `batball_population` gives the exact population of Figure 1. `pre_ai_signals` gives a pre-AI sample. | Table 1, Figure 1 |
+| Data | `simulate_batball` gives a simulated survey. `batball_population` gives the exact population of Figure 1. `pre_ai_signals` gives a pre-AI sample. | Figure 1 |
 
 ## Tests
 
@@ -57,7 +57,6 @@ The tests reproduce the paper's numbers:
 - arms (0.34, 0.35), (0.18, 0.43) and (0.14, 0.46)
 - θ01 = 0.47 and θ12 = 0.49
 - bounds [0.43, 0.53] and [0.46, 0.51], and their intersection [0.49, 0.51]
-- Table 1's 25% and 33%
 
 They also check the following:
 - The standard error equals the formula of the Table 2 code.
@@ -74,7 +73,7 @@ This is a prototype. Inference for the bounds uses a bootstrap, not the Anderson
 ## The paper's computational appendix
 
 `paper/` holds what the paper itself needs (see `paper/README.md`).
-- `paper/lean/`: Lean 4 proofs of the theorems and of the numbers in Table 1 and Figure 1.
+- `paper/lean/`: Lean 4 proofs of the theorems and of the numbers in Figure 1.
 - `paper/replication/`: the code that rebuilds the Glassdoor test bed and reproduces Table 2.
 
 License: MIT.

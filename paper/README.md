@@ -2,14 +2,14 @@
 
 This folder accompanies *Dealing with AI Contamination in Behavioral Research*. It has two parts.
 
-- `lean/`: a Lean 4 project that checks with Mathlib every result of the paper whose proof is exact algebra or finite probability, and every number in Table 1 and Figure 1.
+- `lean/`: a Lean 4 project that checks with Mathlib every result of the paper whose proof is exact algebra or finite probability, and every number in Figure 1.
 - `replication/`: the Python code that rebuilds the Glassdoor test bed and reproduces Table 2.
 
 ## Lean
 
 **Versions.** Lean `v4.35.0-rc4` and Mathlib commit `fad34067088f101a9a302d9393aacbffa190694c`, pinned in `lean/lean-toolchain` and `lean/lake-manifest.json`.
 
-**Status.** The project has 77 theorems and no `sorry`. `lean/AxiomAudit.lean` prints the axioms of every theorem. Each one uses only `propext`, `Classical.choice` and `Quot.sound` (see `lean/axiom_audit.txt`).
+**Status.** The project has 69 theorems and no `sorry`. `lean/AxiomAudit.lean` prints the axioms of every theorem. Each one uses only `propext`, `Classical.choice` and `Quot.sound` (see `lean/axiom_audit.txt`).
 
 ```bash
 cd lean
@@ -40,7 +40,6 @@ lake env lean AxiomAudit.lean   # prints the axioms
 | Theorem latent (a), IPW | `Latent.latent_a`, `Latent.latent_a_unbiased` | `ThmLatent.lean` |
 | Theorem latent (b), expectation given observed data | `Latent.latent_b`, `Latent.latent_b_formula` | `ThmLatent.lean` |
 | Lemma coding (Appendix H) | `coding_a`, `coding_a_arm` | `LemCoding.lean` |
-| Table 1: reported shares, misclassified answers, weights, biases | `Examples.table1_*` | `Examples.lean` |
 | Figure 1 example (Appendix D): arms, `θ_{01} = 0.47`, `θ_{12} = 0.49`, slopes, bounds, MTS | `Examples.fig_arms`, `fig_theta`, `fig_slopes`, `fig_manski`, `fig_below`, `fig_mts` | `Examples.lean` |
 
 Not formalized:
