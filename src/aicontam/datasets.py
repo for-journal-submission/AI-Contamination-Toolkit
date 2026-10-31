@@ -1,4 +1,4 @@
-"""Simulated data: the bat-and-ball example of the paper (Table 1 and Figure 1).
+"""Simulated data: the bat-and-ball example of Figure 1 of the paper.
 
 Participants answer the bat-and-ball question. Y = 1 if the answer is wrong (10 cents), the
 target is the share who would answer wrong without AI, and AI always answers right. There

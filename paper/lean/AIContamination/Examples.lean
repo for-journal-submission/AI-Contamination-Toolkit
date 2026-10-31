@@ -7,8 +7,6 @@ import Mathlib.Tactic.FinCases
 /-!
 # Every number in the examples
 
-* Table 1 (`tab:example`): 100 participants answer the bat-and-ball question; 50 would answer
-  wrong, 25 of them let AI answer, and AI answers right.
 * Figure 1 (`fig:setid`) and its example in Appendix D.
 -/
 
@@ -22,81 +20,6 @@ set_option linter.unusedTactic false
 set_option linter.unreachableTactic false
 set_option linter.unnecessarySeqFocus false
 set_option linter.unusedSimpArgs false
-
-/-! ## Table 1 -/
-
-/-- Types: 0 = wrong, own answer; 1 = would answer wrong, AI answers right; 2 = right. -/
-def p1 : Fin 3 → ℝ := ![1/4, 1/4, 1/2]
-def W1 : Fin 3 → Bool := ![false, true, false]
-/-- `true` = wrong (10 cents). -/
-def Y0t : Fin 3 → Bool := ![true, true, false]
-def Yobst : Fin 3 → Bool := ![true, false, false]
-/-- The poor detector flags the 50 who answer right themselves and misses the 25 AI users. -/
-def Spoor : Fin 3 → Bool := ![false, false, true]
-/-- `g(y) = y` with `y = 1` for a wrong answer. -/
-def gD : Bool → ℝ := fun b => if b then 1 else 0
-
-/-- Share reported wrong after deleting the answers flagged by `S`. -/
-def reported (S : Fin 3 → Bool) : ℝ :=
-  (∑ i, p1 i * (if S i then 0 else 1) * gD (Yobst i)) / (∑ i, p1 i * (if S i then 0 else 1))
-
-/-- Table 1, last column: 25%, 33%, 50%. -/
-theorem table1_reported :
-    reported (fun _ => false) = 1/4 ∧ reported W1 = 1/3 ∧ reported Spoor = 1/2 := by
-  refine ⟨?_, ?_, ?_⟩ <;>
-  simp [reported, Fin.sum_univ_three, p1, W1, Spoor, Yobst, gD] <;> norm_num
-
-/-- Table 1, people misclassified (out of 100): 25, 0, 75. -/
-theorem table1_misclassified :
-    100 * ∑ i, (if (false : Bool) ≠ W1 i then p1 i else 0) = 25 ∧
-    100 * ∑ i, (if W1 i ≠ W1 i then p1 i else 0) = 0 ∧
-    100 * ∑ i, (if Spoor i ≠ W1 i then p1 i else 0) = 75 := by
-  refine ⟨?_, ?_, ?_⟩ <;> simp [Fin.sum_univ_three, p1, W1, Spoor] <;> norm_num
-
-/-- Ideal weights of Lemma `lem:balance`: `ω*(1) = 2`, `ω*(0) = 2/3`. -/
-theorem table1_omegaStar : omegaStar p1 Y0t Yobst true = 2 ∧ omegaStar p1 Y0t Yobst false = 2/3 := by
-  refine ⟨?_, ?_⟩ <;> simp [omegaStar, mass, Fin.sum_univ_three, p1, Y0t, Yobst] <;> norm_num
-
-/-- No correction: `ω = 1`. -/
-def omNone : Fin 3 → ℝ := fun _ => 1
-/-- A perfect detector: `ω = (1 − W)/0.75`. -/
-def omPerfect : Fin 3 → ℝ := fun i => (if W1 i then 0 else 1) / (3/4)
-/-- The poor detector: `ω = (1 − S^obs)/0.5`. -/
-def omPoor : Fin 3 → ℝ := fun i => (if Spoor i then 0 else 1) / (1/2)
-
-/-- Average weights: no correction 1; perfect detector `4/3` and `8/9`; poor detector `2` and
-`2/3`, the ideal weights. -/
-theorem table1_omegaBar :
-    omegaBar p1 omNone Yobst true = 1 ∧
-    omegaBar p1 omPerfect Yobst true = 4/3 ∧ omegaBar p1 omPerfect Yobst false = 8/9 ∧
-    omegaBar p1 omPoor Yobst true = 2 ∧ omegaBar p1 omPoor Yobst false = 2/3 := by
-  refine ⟨?_, ?_, ?_, ?_, ?_⟩ <;>
-  simp [omegaBar, wmass, mass, Fin.sum_univ_three, p1, Yobst, omNone, omPerfect, omPoor, W1,
-    Spoor] <;> norm_num
-
-/-- Biases: `−0.25`, `−1/6`, `0`. -/
-theorem table1_bias :
-    bias p1 omNone Y0t Yobst gD = -1/4 ∧ bias p1 omPerfect Y0t Yobst gD = -1/6 ∧
-    bias p1 omPoor Y0t Yobst gD = 0 := by
-  refine ⟨?_, ?_, ?_⟩ <;>
-  simp [bias, E, Fin.sum_univ_three, p1, Y0t, Yobst, gD, omNone, omPerfect, omPoor, W1,
-    Spoor] <;> norm_num
-
-/-- The same biases from Lemma `lem:balance`: `0.25 {ω̄(1) − 2}`. -/
-theorem table1_bias_via_thm1 :
-    (1/4 : ℝ) * (1 - 2) = -1/4 ∧ (1/4 : ℝ) * (4/3 - 2) = -1/6 ∧ (1/4 : ℝ) * (2 - 2) = 0 := by
-  norm_num
-
-/-- `E[Y(0)] = 0.5`, `E[Y^obs] = 0.25`. -/
-theorem table1_means : E p1 (fun i => gD (Y0t i)) = 1/2 ∧ E p1 (fun i => gD (Yobst i)) = 1/4 := by
-  refine ⟨?_, ?_⟩ <;> simp [E, Fin.sum_univ_three, p1, Y0t, Yobst, gD] <;> norm_num
-
-/-- Theorem 1 with a perfect detector: the bias is `α {E[g | W = 0] − E[g | W = 1]}
-= 0.25 (1/3 − 1) = −1/6`. -/
-theorem table1_perfect_detector :
-    condMean p1 (fun i => W1 i = false) (obsVal W1 (fun i => gD (Y0t i)) (fun _ => 0))
-      - E p1 (fun i => gD (Y0t i)) = -1/6 := by
-  simp [condMean, EOn, P, E, obsVal, Fin.sum_univ_three, p1, W1, Y0t, gD]; norm_num
 
 /-! ## Figure 1 and its example (Appendix D)
 

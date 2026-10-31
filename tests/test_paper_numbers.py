@@ -1,4 +1,4 @@
-"""The numbers of Table 1, Figure 1 and Appendix D of the paper."""
+"""The numbers of Figure 1 and Appendix D of the paper."""
 
 import numpy as np
 import pytest
@@ -37,13 +37,3 @@ def test_mts_side(pop):
     assert h["gap"].iloc[0] == pytest.approx(0.43 - 0.438)
     assert h["side"].iloc[0] == "below"
 
-
-def test_table1_deletion():
-    # 100 participants, 50 wrong without AI, 25 of them let AI answer (right); perfect detector
-    y0 = np.r_[np.ones(50), np.zeros(50)]
-    w = np.r_[np.ones(25), np.zeros(75)]
-    yobs = np.where(w == 1, 0, y0)
-    assert ac.no_correction(yobs)["estimate"].iloc[0] == pytest.approx(0.25)
-    assert ac.delete_flagged(yobs, w)["estimate"].iloc[0] == pytest.approx(1 / 3)
-    ai_term, human_term = ac.deletion_bias(y0, np.zeros(100), w, w)
-    assert ai_term == 0 and human_term == pytest.approx(1 / 3 - 0.5)

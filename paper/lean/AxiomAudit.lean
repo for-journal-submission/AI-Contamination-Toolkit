@@ -63,14 +63,6 @@ import AIContamination
 #print axioms AIC.AR_quadratic
 #print axioms AIC.quad_set_bounded
 #print axioms AIC.quad_set_unbounded
-#print axioms AIC.Examples.table1_reported
-#print axioms AIC.Examples.table1_misclassified
-#print axioms AIC.Examples.table1_omegaStar
-#print axioms AIC.Examples.table1_omegaBar
-#print axioms AIC.Examples.table1_bias
-#print axioms AIC.Examples.table1_bias_via_thm1
-#print axioms AIC.Examples.table1_means
-#print axioms AIC.Examples.table1_perfect_detector
 #print axioms AIC.Examples.fig_arms
 #print axioms AIC.Examples.fig_theta
 #print axioms AIC.Examples.fig_slopes

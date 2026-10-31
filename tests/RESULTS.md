@@ -12,8 +12,6 @@
 | bound (ii) arm 1 | [0.43, 0.53] | [0.43, 0.53] |
 | bound (ii) arm 2 | [0.46, 0.51] | [0.46, 0.51] |
 | bound intersection | [0.49, 0.51] | [0.49, 0.51] |
-| Table 1 no correction | 25% | 25% |
-| Table 1 delete, perfect detector | 33% | 33% |
 
 ## Inference (truth 0.5, homogeneous effect, N = 3,000, 400 surveys)
 
@@ -29,18 +27,17 @@
 
 ```
 tests/test_extensions.py::test_pseudo_outcome_unbiased_with_bad_llm PASSED [  7%]
-tests/test_extensions.py::test_coding_then_iv PASSED                     [ 14%]
-tests/test_extensions.py::test_latent_ipw_recovers_truth PASSED          [ 21%]
-tests/test_inference.py::test_se_matches_table2_formula PASSED           [ 28%]
-tests/test_inference.py::test_coverage_homogeneous PASSED                [ 35%]
-tests/test_inference.py::test_ar_unbounded_without_first_stage PASSED    [ 42%]
-tests/test_inference.py::test_plan_matches_simulation PASSED             [ 50%]
-tests/test_inference.py::test_assign_arms PASSED                         [ 57%]
-tests/test_paper_numbers.py::test_arms PASSED                            [ 64%]
-tests/test_paper_numbers.py::test_theta PASSED                           [ 71%]
-tests/test_paper_numbers.py::test_bounds PASSED                          [ 78%]
-tests/test_paper_numbers.py::test_mts_side PASSED                        [ 85%]
-tests/test_paper_numbers.py::test_table1_deletion PASSED                 [ 92%]
+tests/test_extensions.py::test_coding_then_iv PASSED                     [ 15%]
+tests/test_extensions.py::test_latent_ipw_recovers_truth PASSED          [ 23%]
+tests/test_inference.py::test_se_matches_table2_formula PASSED           [ 30%]
+tests/test_inference.py::test_coverage_homogeneous PASSED                [ 38%]
+tests/test_inference.py::test_ar_unbounded_without_first_stage PASSED    [ 46%]
+tests/test_inference.py::test_plan_matches_simulation PASSED             [ 53%]
+tests/test_inference.py::test_assign_arms PASSED                         [ 61%]
+tests/test_paper_numbers.py::test_arms PASSED                            [ 69%]
+tests/test_paper_numbers.py::test_theta PASSED                           [ 76%]
+tests/test_paper_numbers.py::test_bounds PASSED                          [ 84%]
+tests/test_paper_numbers.py::test_mts_side PASSED                        [ 92%]
 tests/test_plot.py::test_plot_runs PASSED                                [100%]
-============================== 14 passed in 4.11s ==============================
+============================== 13 passed in 4.11s ==============================
 ```
