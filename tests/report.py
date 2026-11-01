@@ -65,3 +65,17 @@ truth = np.mean(np.where(c == 1, 0.7, 0.2))
 r = ac.latent_ipw(np.column_stack([target] + other), s, 0.1, 0.9, ai_free=(1, 2, 3), seed=1)
 print(f"- Latent class IPW (truth {100 * truth:.1f}%): IPW {100 * r.ipw[1]:.1f}%, "
       f"delete flagged {100 * target[s == 0].mean():.1f}%, no correction {100 * target.mean():.1f}%")
+
+print("\n## Edge cases\n")
+n = 1000
+y0 = np.zeros(2 * n)
+z0 = np.repeat([0, 1], n)
+s0 = np.r_[np.arange(n) < 340, np.arange(n) < 180].astype(float)
+r0 = ac.bounds(y0, s0, z0, fpr=0.1, tpr=0.9).rows
+lo, hi = r0["intersection"]
+print(f"- Equal means in arms 0 and 1 (both 0, flagged 0.34 and 0.18): no monotone-response bound; "
+      f"intersection [{lo[0]:.2f}, {hi[0]:.2f}], which contains a consistent truth of 0.10")
+zc = np.repeat([0, 1], 1000)
+spent = [f"budget {b} -> mean pi {ac.human_coding_probs(zc, budget=b, lam=l).mean():.4f}"
+         for b, l in [(0.9, 1.0), (0.02, 0.01), (0.3, 1.0)]]
+print("- Human-coding budget after the caps: " + "; ".join(spent))

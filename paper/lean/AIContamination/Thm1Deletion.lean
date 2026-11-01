@@ -1,7 +1,7 @@
 import AIContamination.Balance
 
 /-!
-# Theorem 1 (`thm:weights`): the bias of deleting flagged answers
+# Proposition 1 (`thm:weights`): the bias of deleting flagged answers
 
 `W : Ω → Bool` is AI use and `S : Ω → Bool` the detector's signal `S^obs`. `G0 G1 : Ω → ℝ` are
 `g(Y(0),X)` and `g(Y(1),X)` for an arbitrary `g`. Deleting flagged answers estimates
@@ -16,7 +16,7 @@ set_option linter.unusedSectionVars false
 
 variable {Ω : Type*} [Fintype Ω]
 
-/-- **Theorem 1.** With `q = Pr(W = 1 | S^obs = 0)`,
+/-- **Proposition 1.** With `q = Pr(W = 1 | S^obs = 0)`,
 `E[g(Y^obs,X) | S^obs = 0] − E[g(Y(0),X)]
   = q {E[g(Y(1),X) | W = 1, S^obs = 0] − E[g(Y(0),X) | W = 0, S^obs = 0]}
     + E[g(Y(0),X) | W = 0, S^obs = 0] − E[g(Y(0),X)]`. -/
@@ -51,7 +51,7 @@ theorem thm1_deletion_bias {p : Ω → ℝ} (hp : ∀ i, 0 ≤ p i) (W S : Ω �
   field_simp
   ring
 
-/-- **A perfect detector** (`S^obs = W`). The first term of Theorem 1 vanishes, and the bias is
+/-- **A perfect detector** (`S^obs = W`). The first term of Proposition 1 vanishes, and the bias is
 `α {E[g(Y(0),X) | W = 0] − E[g(Y(0),X) | W = 1]}` with `α = Pr(W = 1)`. -/
 theorem perfect_detector {p : Ω → ℝ} (hp : ∀ i, 0 ≤ p i) (hsum : ∑ i, p i = 1)
     (W : Ω → Bool) (G0 G1 : Ω → ℝ) :

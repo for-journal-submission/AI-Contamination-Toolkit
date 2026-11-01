@@ -4,7 +4,7 @@ import Mathlib.Analysis.Calculus.Deriv.Add
 import Mathlib.Analysis.Calculus.Deriv.Inv
 
 /-!
-# Theorem `thm:inference` (Appendix E): the exact parts
+# Theorem 2 (`thm:inference`, Appendix E): the exact parts
 
 Formalized: the moment function `M` (`ψ` in the paper), `M(θ₀) = 0` at the truth, its uniqueness
 when the first stage is nonzero, linearity in `θ₀`, the gradient with respect to the five means,
@@ -27,15 +27,15 @@ set_option linter.unusedSectionVars false
 /-- `M(θ₀) = (θ₀ − Ȳ₁)(S̄₀ − S̄₁) − (S̄₁ − FPR)(Ȳ₁ − Ȳ₀)`. -/
 def Mfun (θ Y1 Y0 S0 S1 F : ℝ) : ℝ := (θ - Y1) * (S0 - S1) - (S1 - F) * (Y1 - Y0)
 
-/-- **`M(θ₀) = 0` at the truth** under Theorem 2 (i): arms `a0` (relaxed) and `a1`. -/
+/-- **`M(θ₀) = 0` at the truth** under Theorem 1 (i): arms `a0` (relaxed) and `a1`. -/
 theorem M_zero_at_truth {Ω : Type*} [Fintype Ω] (C : Curve Ω) (β₀ : ℝ)
     (hβ : ∀ v, C.τ v = β₀ * C.κ v) (a0 a1 : ℝ) :
     Mfun C.μ (C.G a1) (C.G a0) (C.S a0) (C.S a1) C.fpr = 0 := by
   unfold Mfun; rw [C.G_line β₀ hβ a0, C.G_line β₀ hβ a1]; ring
 
 /-- **The identifying equation of the bounds.** At the true secant slope `b = β_M` of
-Equation (`eq:line`), `θ₀ − Ḡ_M + b (S̄_M − FPR) = 0` at `θ₀ = E[g(Y(0),X)]`; it is a
-polynomial in the arm means and FPR, as the proof of Theorem `thm:inference` uses. -/
+Equation C1 (`eq:line`), `θ₀ − Ḡ_M + b (S̄_M − FPR) = 0` at `θ₀ = E[g(Y(0),X)]`; it is a
+polynomial in the arm means and FPR, as the proof of Theorem 2 (`thm:inference`) uses. -/
 theorem bound_equation {Ω : Type*} [Fintype Ω] (C : Curve Ω) (c : ℝ) (h : C.I c C.κ ≠ 0) :
     C.μ - C.G c + C.I c C.τ / C.I c C.κ * (C.S c - C.fpr) = 0 := by
   have := C.eq_line c h; linarith
@@ -45,7 +45,7 @@ theorem M_linear (θ Y1 Y0 S0 S1 F : ℝ) :
     Mfun θ Y1 Y0 S0 S1 F = (S0 - S1) * θ - (Y1 * (S0 - S1) + (S1 - F) * (Y1 - Y0)) := by
   unfold Mfun; ring
 
-/-- With a nonzero first stage, the only root of `M` is the estimator `θ_{01}` of Theorem 2 (i). -/
+/-- With a nonzero first stage, the only root of `M` is the estimator `θ_{01}` of Theorem 1 (i). -/
 theorem M_root_iff (θ Y1 Y0 S0 S1 F : ℝ) (h : S0 - S1 ≠ 0) :
     Mfun θ Y1 Y0 S0 S1 F = 0 ↔ θ = Y1 + (S1 - F) / (S0 - S1) * (Y1 - Y0) := by
   unfold Mfun
@@ -145,7 +145,7 @@ theorem Var_lin (r Y S : J → ℝ) (a b : ℝ) :
     exact Finset.sum_congr rfl (fun j _ => by ring)
   rw [this]; ring
 
-/-- The variance `v(θ₀)` of the proof of Theorem `thm:inference` with plug-in moments: arm `z` has a finite
+/-- The variance `v(θ₀)` of the proof of Theorem 2 (`thm:inference`) with plug-in moments: arm `z` has a finite
 distribution `r_z` of `(Y^obs, S^obs)`. -/
 noncomputable def vAR (r1 r0 Y1v S1v Y0v S0v : J → ℝ) (F ρ γ θ : ℝ) : ℝ :=
   Var r1 (fun j => (E r0 S0v - F) * Y1v j + (θ - E r0 Y0v) * S1v j) / ρ

@@ -1,4 +1,4 @@
-"""The IV estimator of Theorem 2(i), its standard error, and the Anderson-Rubin set (Theorem 3).
+"""The IV estimator of Theorem 1(i), its standard error, and the Anderson-Rubin set (Theorem 2).
 
 Notation follows the paper. Arm z has flagged share S_z and mean answer G_z. The estimate
 from arms a (weaker friction) and b (stronger friction) is the height at FPR of the line
@@ -95,7 +95,7 @@ class IVResult:
 
 
 def friction_iv(y, s, z, fpr, arms=None, level=0.95, categorical=None, categories=None):
-    """IV estimate of the distribution of human answers (Theorem 2(i)).
+    """IV estimate of the distribution of human answers (Theorem 1(i)).
 
     Parameters
     ----------
@@ -130,7 +130,7 @@ def no_correction(y, categorical=None, categories=None):
 
 
 def delete_flagged(y, s, categorical=None, categories=None):
-    """Mean of the answers the detector does not flag (biased: Theorem 1)."""
+    """Mean of the answers the detector does not flag (biased: Proposition 1)."""
     from ._data import outcome_matrix
     Y, labels = outcome_matrix(y, categorical, categories)
     kept = Y[np.asarray(s) == 0]

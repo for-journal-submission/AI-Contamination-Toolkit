@@ -61,7 +61,7 @@ theorem fig_slopes :
   refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_⟩ <;>
   simp [Curve.S, Curve.G, Curve.I, fig, Fin.sum_univ_four] <;> norm_num
 
-/-- Theorem 2 (ii) with `g ∈ [0, 1]` and `A_z = 0`: `[0.43, 0.53]` from arm 1 and
+/-- Theorem 1 (ii) with `g ∈ [0, 1]` and `A_z = 0`: `[0.43, 0.53]` from arm 1 and
 `[0.46, 0.51]` from arm 2; `α_z = (S̄_z − FPR)/(TPR − FPR)`. -/
 theorem fig_manski :
     (fig.S 1 - 0.1) / (0.9 - 0.1) = 0.10 ∧ (fig.S 0 - 0.1) / (0.9 - 0.1) = 0.05 ∧
@@ -70,7 +70,7 @@ theorem fig_manski :
   refine ⟨?_, ?_, ?_, ?_, ?_, ?_⟩ <;>
   simp [Curve.S, Curve.G, Curve.I, fig, Fin.sum_univ_four] <;> norm_num
 
-/-- Theorem 2 (iv): the line through arms 0 and 2 reaches `0.446` at `S̄_1 = 0.18`, above
+/-- Theorem 1 (iv): the line through arms 0 and 2 reaches `0.446` at `S̄_1 = 0.18`, above
 `Ḡ_1 = 0.43`, so arm 1 lies below it. -/
 theorem fig_below :
     fig.G 0 + (fig.G 2 - fig.G 0) * (fig.S 1 - fig.S 0) / (fig.S 2 - fig.S 0) = 0.446 ∧
@@ -78,8 +78,8 @@ theorem fig_below :
   refine ⟨?_, ?_⟩ <;>
   simp [Curve.S, Curve.G, Curve.I, fig, Fin.sum_univ_four] <;> norm_num
 
-/-- `β(v)` rises in `v` in this population (`−1, −0.75, −0.25, 0`), so Theorem 2 (iv) applies
-and gives `E[g(Y(0),X)] ≥ θ_{12} = 0.49`; with Theorem 2 (ii) from arm 2, `[0.49, 0.51]`. -/
+/-- `β(v)` rises in `v` in this population (`−1, −0.75, −0.25, 0`), so Theorem 1 (iv) applies
+and gives `E[g(Y(0),X)] ≥ θ_{12} = 0.49`; with Theorem 1 (ii) from arm 2, `[0.49, 0.51]`. -/
 theorem fig_mts : fig.θ 1 0 ≤ fig.μ := by
   have hκ : ∀ v, 0 < fig.κ v := fun v => by simp [fig]
   have hmono : ∀ v u, fig.r v ≤ fig.r u → fig.β v ≤ fig.β u := by

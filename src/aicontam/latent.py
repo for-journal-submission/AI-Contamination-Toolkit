@@ -1,4 +1,4 @@
-"""Weighting without an instrument: IPW under latent ignorability (Theorem latent, Appendix G).
+"""Weighting without an instrument: IPW under latent ignorability (Theorem 3, Appendix G).
 
 A latent class model treats each participant's class C and AI use W as unobserved. Given the
 state (C, W), the answers to the J questions are independent, and the signal follows the
@@ -9,7 +9,7 @@ holds within a class: the human answer does not depend on W given C. The model i
 
     E[omega_IPW | O_i] = sum_c Pr(W = 0, C = c | O_i) / (1 - e(c)),   e(c) = Pr(W = 1 | C = c),
 
-identifies the distribution of human answers (Theorem latent (b)). This module is a
+identifies the distribution of human answers (Theorem 3(b)). This module is a
 prototype: it handles discrete answers and no covariates (fit it within strata of X).
 """
 

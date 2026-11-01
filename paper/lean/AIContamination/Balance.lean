@@ -1,7 +1,7 @@
 import AIContamination.Basic
 
 /-!
-# Lemma `lem:balance` (Appendix G): when weighting estimators are unbiased
+# Lemma G1 (`lem:balance`, Appendix G): when weighting estimators are unbiased
 
 Cells `κ` stand for the finitely many values of `(Y, X)`. The map `obs : Ω → κ` is
 `(Y_i^obs, X_i)` and `tru : Ω → κ` is `(Y_i(0), X_i)`. A function `g : κ → ℝ` is any
@@ -70,7 +70,7 @@ lemma mass_mul_omegaStar (p : Ω → ℝ) (tru obs : Ω → κ)
   · rw [h, hpos k h]; simp
   · field_simp
 
-/-- **Lemma `lem:balance`, bias identity.** For every `g`,
+/-- **Lemma G1 (`lem:balance`), bias identity.** For every `g`,
 `E[ω g(Y^obs,X)] − E[g(Y(0),X)] = E[{ω̄ − ω*}(Y^obs,X) g(Y^obs,X)]`. -/
 theorem balance_identity {p : Ω → ℝ} (hp : ∀ i, 0 ≤ p i) (ω : Ω → ℝ) (tru obs : Ω → κ)
     (hpos : ∀ k, mass p obs k = 0 → mass p tru k = 0) (g : κ → ℝ) :
@@ -98,7 +98,7 @@ theorem balance_cells {p : Ω → ℝ} (hp : ∀ i, 0 ≤ p i) (ω : Ω → ℝ)
   rw [this]
   refine Finset.sum_congr rfl (fun k _ => by ring)
 
-/-- **Lemma `lem:balance`, characterization.** The correction is unbiased for every `g` if and only if
+/-- **Lemma G1 (`lem:balance`), characterization.** The correction is unbiased for every `g` if and only if
 `ω̄ = ω*` on the support of `(Y^obs, X)`. -/
 theorem balance_unbiased_iff {p : Ω → ℝ} (hp : ∀ i, 0 ≤ p i) (ω : Ω → ℝ) (tru obs : Ω → κ)
     (hpos : ∀ k, mass p obs k = 0 → mass p tru k = 0) :

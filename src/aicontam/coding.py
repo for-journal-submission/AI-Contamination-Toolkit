@@ -1,4 +1,4 @@
-"""Coding open-ended answers with an LLM, corrected by a random human-coded subset (Lemma coding).
+"""Coding open-ended answers with an LLM, corrected by a random human-coded subset (Lemma H1).
 
 Each answer is sent to a human coder with a known probability pi_i (xi_i = 1 if it was). The
 pseudo-outcome
@@ -19,18 +19,29 @@ def human_coding_probs(z, budget, lam, arms=None, floor=0.02):
 
     The estimate from arms (a, b) is (1 + lam) G_b - lam G_a, so its variance falls fastest
     when pi is proportional to the arm weight: 1 + lam in arm b and lam in arm a. Other arms
-    get `floor`. `budget` is the expected share of all answers coded by humans; `lam` is a
-    pilot value of lambda = (S_b - FPR)/(S_a - S_b).
+    get `floor`. Probabilities are capped at 1 and kept at least `floor`, and the rest of the
+    budget is spread in proportion to the weights, so the mean of pi equals `budget`, the
+    expected share of all answers coded by humans. `lam` is a pilot value of
+    lambda = (S_b - FPR)/(S_a - S_b).
     """
     z = np.asarray(z)
     a, b = arms if arms is not None else (z.max() - 1, z.max())
     w = np.where(z == b, 1 + lam, np.where(z == a, lam, 0.0))
-    pi = np.full(len(z), floor)
-    free = budget * len(z) - floor * np.sum(w == 0)
-    if free <= 0:
-        raise ValueError("budget too small for the floor")
-    pi[w > 0] = np.minimum(1, w[w > 0] * free / w.sum())
-    return np.maximum(pi, floor)
+    lo, hi = floor, np.mean(np.where(w > 0, 1.0, floor))
+    if not lo <= budget <= hi:
+        raise ValueError(f"budget must lie in [{lo:.4f}, {hi:.4f}] for this floor and these arms")
+
+    def probs(c):
+        return np.where(w > 0, np.clip(c * w, floor, 1.0), floor)
+
+    # pi = clip(c w, floor, 1); the mean rises with c, so bisection finds the c that spends the budget.
+    c_lo, c_hi = 0.0, 1.0
+    while probs(c_hi).mean() < budget:
+        c_hi *= 2
+    for _ in range(200):
+        c = (c_lo + c_hi) / 2
+        c_lo, c_hi = (c, c_hi) if probs(c).mean() < budget else (c_lo, c)
+    return probs(c_hi)
 
 
 def draw_human_coding(pi, seed=None):

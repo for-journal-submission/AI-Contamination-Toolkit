@@ -28,7 +28,7 @@ def simulate_batball(n=3000, arm_shares=(1 / 3, 1 / 3, 1 / 3), wrong=None, ai_wr
     `flagged` and, for teaching, the hidden columns `type`, `uses_ai`, `wrong_without_ai`.
 
     `wrong` overrides the four types' error rates without AI; equal rates make the effect of
-    AI homogeneous (Theorem 2(i) holds exactly). `arms` takes an assignment from
+    AI homogeneous (Theorem 1(i) holds exactly). `arms` takes an assignment from
     `assign_arms` instead of drawing one from `arm_shares`.
     """
     from .design import assign_arms
@@ -69,7 +69,7 @@ def pre_ai_signals(m=300, fpr=0.1, seed=None):
 
 
 def deletion_bias(y0, y1, w, s):
-    """The two terms of Theorem 1 in data where the potential answers are known (a simulation).
+    """The two terms of Proposition 1 in data where the potential answers are known (a simulation).
 
     Returns (AI answers kept, human answers selected); their sum is the bias of deleting
     flagged answers.

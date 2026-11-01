@@ -17,7 +17,7 @@ plan = ac.plan_sample_size(0.02, alpha=(0.30, 0.05), mu=0.5, ai_mean=0.0, fpr=0.
                            shares=(0.5, 0.5), m=300)
 print("1. Design:", plan)
 
-# Three arms make Theorem 2(iv) and the homogeneity test possible.
+# Three arms make Theorem 1(iv) and the homogeneity test possible.
 z = ac.assign_arms(6000, [1 / 3, 1 / 3, 1 / 3], seed=1)
 print("   arms assigned:", [int((z == a).sum()) for a in range(3)])
 
@@ -37,13 +37,14 @@ print("\n   Is the middle arm on the line? (homogeneity test)\n",
       ac.homogeneity_test(d.wrong, d.flagged, d.arm, n_boot=499))
 
 # The drop from arm 1 to arm 2 is small (t below 3), so the Anderson-Rubin set is the one to
-# report. The middle arm lies below the line, so the curve is convex: Theorem 2(iv) applies.
+# report. The middle arm lies below the line. If beta(v) is monotone, the curve is then
+# convex, and Theorem 1(iv) applies.
 
 # 5. Estimate. The truth is 50% wrong. No correction and deletion are biased downward.
 print("\n5.", ac.friction_iv(d.wrong, d.flagged, d.arm, fpr))
 print("\n   Three methods side by side:\n", ac.compare(d.wrong, d.flagged, d.arm, fpr))
 
-# 6. Bounds that do not assume homogeneity (Theorem 2(ii)-(iv)). In the population of
+# 6. Bounds that do not assume homogeneity (Theorem 1(ii)-(iv)). In the population of
 #    Figure 1 they are [0.49, 0.51]; the ci columns account for sampling noise.
 tpr = ac.Rate(0.9, 300)  # TPR from 300 AI answers
 print("\n6. Bounds:\n", ac.bounds(d.wrong, d.flagged, d.arm, fpr, tpr, n_boot=499))

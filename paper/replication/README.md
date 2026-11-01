@@ -16,7 +16,7 @@ python3 table2.py                        # about 30 s; prints the rows of Table 
 
 ## Data
 
-- Glassdoor reviews: Kaggle, `davidgauthier/glassdoor-job-reviews` (version 11), downloaded by `download_data.py`.
+- Glassdoor reviews: Kaggle, `davidgauthier/glassdoor-job-reviews` (version 11), downloaded by `download_data.py`, which checks the SHA-256 of `glassdoor_reviews.csv` (`9273f0ba1a4643ccd4fbd47ac2aa016b6d46c2c3444dc3f0039d6f1d20644387`).
 - AI answers, generated through OpenRouter on October 1–3, 2026, shipped in `data/ai_answers/` (gzipped JSON lines with fields `tag`, `model`, `text`; no model is called):
   - `replacements.jsonl.gz`: answers written for survey employees by Gemini 3.8 Flash and DeepSeek V4.1 Flash;
   - `references.jsonl.gz`: answers by Claude Sonnet 5 and GPT that train the detector. GPT was called as `openai/gpt-chat-latest`, which on the generation dates pointed to the August 2026 chat version of GPT-5.6 Sol;

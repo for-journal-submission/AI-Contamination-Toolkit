@@ -1,7 +1,7 @@
 import AIContamination.Basic
 
 /-!
-# Lemma `lem:coding` (coding by AI)
+# Lemma H1 (`lem:coding`, Appendix H): coding by AI
 
 `Ω` lists the values of `(O, Y^obs)`. `A i = 1{Y^obs = y}`, `μ i = μ(O)` is any prediction and
 `π i = π(O) > 0` the hand-coding probability. The joint distribution of `(O, Y^obs, ξ)` has

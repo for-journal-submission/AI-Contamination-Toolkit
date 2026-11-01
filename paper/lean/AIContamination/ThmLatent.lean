@@ -1,7 +1,7 @@
 import AIContamination.Balance
 
 /-!
-# Theorem `thm:latent` (Appendix G): weighting without an instrument
+# Theorem 3 (`thm:latent`, Appendix G): weighting without an instrument
 
 `C` is the latent class, `X` the covariates, `W` AI use, `Y0` the own answer and `Yobs` the
 observed answer. Ignorability `W ⫫ Y(0) | (X, C)` is stated in its multiplicative form
@@ -29,7 +29,7 @@ lemma P_nonneg {p : Ω → ℝ} (hp : ∀ i, 0 ≤ p i) (A : Ω → Prop) [Decid
     0 ≤ P p A :=
   Finset.sum_nonneg (fun i _ => by split_ifs <;> simp [hp i])
 
-/-- A population for Theorem `thm:latent`. -/
+/-- A population for Theorem 3 (`thm:latent`). -/
 structure Latent (Ω 𝒴 𝒳 𝒞 : Type*) [Fintype Ω] where
   p : Ω → ℝ
   hp : ∀ i, 0 ≤ p i
@@ -107,7 +107,7 @@ lemma cell_step (hI : L.Ignorable) (hO : L.Overlap) (y : 𝒴) (x : 𝒳) (c : �
       rw [← hz]; exact P_le_of_imp L.hp (fun i h => ⟨h.2.1, h.2.2⟩)
     rw [h1, h2]; simp
 
-/-- **Theorem `thm:latent` (a).** Under SUTVA, ignorability given the class, and overlap, the
+/-- **Theorem 3 (`thm:latent`) (a).** Under SUTVA, ignorability given the class, and overlap, the
 `ω^IPW`-weighted distribution of `(Y^obs, X)` is the distribution of `(Y(0), X)`. -/
 theorem latent_a_wmass (hI : L.Ignorable) (hO : L.Overlap) (k : 𝒴 × 𝒳) :
     wmass L.p L.omegaIPW L.obs k = mass L.p L.tru k := by
@@ -139,12 +139,12 @@ theorem latent_a_wmass (hI : L.Ignorable) (hO : L.Overlap) (k : 𝒴 × 𝒳) :
   beta_reduce
   by_cases hy : L.Y0 i = y <;> by_cases hx : L.X i = x <;> simp [hy, hx]
 
-/-- **Theorem `thm:latent` (a): `ω̄^IPW = ω*`** (on every cell; off the support both are 0). -/
+/-- **Theorem 3 (`thm:latent`) (a): `ω̄^IPW = ω*`** (on every cell; off the support both are 0). -/
 theorem latent_a (hI : L.Ignorable) (hO : L.Overlap) (k : 𝒴 × 𝒳) :
     omegaBar L.p L.omegaIPW L.obs k = omegaStar L.p L.tru L.obs k := by
   unfold omegaBar omegaStar; rw [L.latent_a_wmass hI hO k]
 
-/-- ... and so the IPW estimator is unbiased for every `g` (Lemma `lem:balance`). -/
+/-- ... and so the IPW estimator is unbiased for every `g` (Lemma G1, `lem:balance`). -/
 theorem latent_a_unbiased (hI : L.Ignorable) (hO : L.Overlap) (g : 𝒴 × 𝒳 → ℝ) :
     bias L.p L.omegaIPW L.tru L.obs g = 0 :=
   (balance_unbiased_iff_wmass L.p L.omegaIPW L.tru L.obs).2 (L.latent_a_wmass hI hO) g
@@ -156,7 +156,7 @@ variable {𝒪 : Type*} [Fintype 𝒪] [DecidableEq 𝒪]
 /-- `E[ω | O = o]`. -/
 noncomputable def postO (ω : Ω → ℝ) (O : Ω → 𝒪) (o : 𝒪) : ℝ := wmass L.p ω O o / mass L.p O o
 
-/-- **Theorem `thm:latent` (b), first part.** If `O` includes `(Y^obs, X)`, replacing `ω` by
+/-- **Theorem 3 (`thm:latent`) (b), first part.** If `O` includes `(Y^obs, X)`, replacing `ω` by
 `E[ω | O]` leaves `E[ω 1{(Y^obs, X) = k}]`, hence `ω̄`, unchanged. -/
 theorem latent_b_same_wmass (ω : Ω → ℝ) (O : Ω → 𝒪) (fY : 𝒪 → 𝒴) (fX : 𝒪 → 𝒳)
     (hY : ∀ i, L.Yobs i = fY (O i)) (hX : ∀ i, L.X i = fX (O i)) (k : 𝒴 × 𝒳) :
@@ -189,7 +189,7 @@ theorem latent_b (hI : L.Ignorable) (hO : L.Overlap) (O : Ω → 𝒪) (fY : �
   unfold omegaBar omegaStar
   rw [L.latent_b_same_wmass L.omegaIPW O fY fX hY hX k, L.latent_a_wmass hI hO k]
 
-/-- **Theorem `thm:latent` (b), formula.**
+/-- **Theorem 3 (`thm:latent`) (b), formula.**
 `E[ω^IPW | O = o] = ∑_c Pr(W = 0, C = c | O = o)/{1 − e(x(o), c)}`. -/
 theorem latent_b_formula (O : Ω → 𝒪) (fX : 𝒪 → 𝒳) (hX : ∀ i, L.X i = fX (O i)) (o : 𝒪) :
     L.postO L.omegaIPW O o = ∑ c, (P L.p (fun i => L.W i = false ∧ L.C i = c ∧ O i = o)

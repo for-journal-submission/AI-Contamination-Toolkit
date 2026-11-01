@@ -1,12 +1,12 @@
 import AIContamination.Balance
 
 /-!
-# Theorem 2 (`thm:friction`): the contamination curve
+# Theorem 1 (`thm:friction`): the contamination curve
 
 **Model.** `Ω` is a finite set of resistance values `v` with weights `p v = Pr(V = v)`; `r v` is
 the resistance itself (only its order matters, as in the paper). `τ v` and `κ v` are the
 marginal treatment effects of AI on `g` and on the signal, `μ = E[g(Y(0),X)]` is the target,
-and `fpr = FPR`. An arm is its threshold `a`: those with `r v ≤ a` use AI (Assumption A4(iii),
+and `fpr = FPR`. An arm is its threshold `a`: those with `r v ≤ a` use AI (Assumption 1(iii),
 `W(z) = 1{V ≤ α_z}`). `eq_curve` derives this model from participant-level potential
 outcomes.
 
@@ -19,13 +19,13 @@ namespace AIC
 
 set_option linter.unusedSectionVars false
 
-/-! ## From potential outcomes to Equation (`eq:curve`) -/
+/-! ## From potential outcomes to Equation 1 (`eq:curve`) -/
 
 section Derivation
 
 variable {Ι : Type*} [Fintype Ι] {Ω : Type*} [Fintype Ω] [DecidableEq Ω]
 
-/-- **Assumption A4 (i)–(ii) and SUTVA at work.** With the arm `Z` drawn independently with
+/-- **Assumption 1 (i)–(ii) and SUTVA at work.** With the arm `Z` drawn independently with
 `Pr(Z = z) = ρ z`, the mean of `f(i, Z_i)` among participants with `Z = z` is the population mean
 of `f(i, z)`. With `f(i, z) = g(Y_i(W_i(z)), X_i)` this says that each arm reveals the
 distribution of `(Y(W(z)), S(W(z)))`. -/
@@ -47,7 +47,7 @@ theorem armMean_eq {𝒵 : Type*} [Fintype 𝒵] [DecidableEq 𝒵] (p : Ι → 
     rw [this]; ring
   unfold condMean; rw [hP, hE]; field_simp
 
-/-- **Equation (`eq:curve`).** Participants `i` with weights `q`, resistance `V i`, and
+/-- **Equation 1 (`eq:curve`).** Participants `i` with weights `q`, resistance `V i`, and
 `g(Y(0),X)`, `g(Y(1),X)` given by `G0 G1`. In the arm with threshold `a`, AI is used iff
 `r (V i) ≤ a`. Then the arm mean of `g(Y^obs,X)` is
 `E[g(Y(0),X)] + ∑_v Pr(V = v) E[τ | V = v] 1{r v ≤ a}`. By `armMean_eq`, this population mean
@@ -112,10 +112,10 @@ noncomputable def Ibetween (a' a : ℝ) (f : Ω → ℝ) : ℝ :=
 /-- Share of AI users in the arm with threshold `a`, `α = Pr(V ≤ a)`. -/
 noncomputable def α (a : ℝ) : ℝ := C.I a (fun _ => 1)
 
-/-- Flagged share of the arm (Equation `eq:curve`): `S̄ = FPR + ∫_0^α κ`. -/
+/-- Flagged share of the arm (Equation 1, `eq:curve`): `S̄ = FPR + ∫_0^α κ`. -/
 noncomputable def S (a : ℝ) : ℝ := C.fpr + C.I a C.κ
 
-/-- Mean of `g` in the arm (Equation `eq:curve`): `Ḡ = E[g(Y(0),X)] + ∫_0^α τ`. -/
+/-- Mean of `g` in the arm (Equation 1, `eq:curve`): `Ḡ = E[g(Y(0),X)] + ∫_0^α τ`. -/
 noncomputable def G (a : ℝ) : ℝ := C.μ + C.I a C.τ
 
 /-- `θ_{zz'}`: height at FPR of the straight line through arms `a` and `a'`. -/
@@ -139,13 +139,13 @@ lemma I_sub (a' a : ℝ) (h : a' ≤ a) (f : Ω → ℝ) :
   · have : ¬ (a' < C.r v ∧ C.r v ≤ a) := fun hh => h2 hh.2
     simp [h1, h2, this]
 
-/-- **Equation (`eq:line`).** `E[g(Y(0),X)] = Ḡ_M − β_M (S̄_M − FPR)`, with `β_M` the slope of
+/-- **Equation C1 (`eq:line`).** `E[g(Y(0),X)] = Ḡ_M − β_M (S̄_M − FPR)`, with `β_M` the slope of
 the secant from arm `M` to the target. -/
 theorem eq_line (c : ℝ) (h : C.I c C.κ ≠ 0) :
     C.μ = C.G c - C.I c C.τ / C.I c C.κ * (C.S c - C.fpr) := by
   unfold G S; field_simp; ring
 
-/-! ### Theorem 2 (i): homogeneity -/
+/-! ### Theorem 1 (i): homogeneity -/
 
 /-- With a constant slope, every arm lies on one line through the target. -/
 lemma G_line (β₀ : ℝ) (hβ : ∀ v, C.τ v = β₀ * C.κ v) (a : ℝ) :
@@ -158,7 +158,7 @@ lemma G_line (β₀ : ℝ) (hβ : ∀ v, C.τ v = β₀ * C.κ v) (a : ℝ) :
     · ring
   unfold G S; rw [hI]; ring
 
-/-- **Theorem 2 (i).** If `β(v)` is constant, `E[g(Y(0),X)] = θ_{zz'}` for any two arms with
+/-- **Theorem 1 (i).** If `β(v)` is constant, `E[g(Y(0),X)] = θ_{zz'}` for any two arms with
 distinct flagged shares. -/
 theorem thm2_i (β₀ : ℝ) (hβ : ∀ v, C.τ v = β₀ * C.κ v) (a a' : ℝ) (hne : C.S a ≠ C.S a') :
     C.μ = C.θ a a' := by
@@ -169,7 +169,7 @@ theorem thm2_i (β₀ : ℝ) (hβ : ∀ v, C.τ v = β₀ * C.κ v) (a a' : ℝ)
   ring
 
 /-- `κ > 0` and a friction that stops someone give distinct flagged shares
-(Assumption A4(iv)). -/
+(Assumption 1(iv)). -/
 theorem S_strict (hκ : ∀ v, 0 < C.κ v) (a' a : ℝ) (h : a' ≤ a)
     (hm : ∃ v, a' < C.r v ∧ C.r v ≤ a ∧ 0 < C.p v) : C.S a' < C.S a := by
   have hpos : 0 < C.Ibetween a' a C.κ := by
@@ -183,16 +183,16 @@ theorem S_strict (hκ : ∀ v, 0 < C.κ v) (a' a : ℝ) (h : a' ≤ a)
   have := C.I_sub a' a h C.κ
   unfold S; linarith
 
-/-- The two-arm weights of the proof of Theorem 2 (i): with
+/-- The two-arm weights of the proof of Theorem 1 (i): with
 `λ = (S̄_1 − FPR)/(S̄_0 − S̄_1)`, `θ_{01} = (1 + λ) Ḡ_1 − λ Ḡ_0`. -/
 theorem theta_weights (a0 a1 : ℝ) :
     C.θ a0 a1 = (1 + (C.S a1 - C.fpr) / (C.S a0 - C.S a1)) * C.G a1
       - (C.S a1 - C.fpr) / (C.S a0 - C.S a1) * C.G a0 := by
   unfold θ; ring
 
-/-! ### Theorem 2 (iii): monotone treatment response -/
+/-! ### Theorem 1 (iii): monotone treatment response -/
 
-/-- **Theorem 2 (iii).** If `τ` does not change sign, `τ(v) τ(v') ≥ 0`, then for arms
+/-- **Theorem 1 (iii).** If `τ` does not change sign, `τ(v) τ(v') ≥ 0`, then for arms
 `a1 < a0` (arm 0 relaxed) `Ḡ_0 < Ḡ_1` implies `E[g(Y(0),X)] ≥ Ḡ_M` for every arm `M`, and
 `Ḡ_0 > Ḡ_1` implies `E[g(Y(0),X)] ≤ Ḡ_M`. -/
 theorem thm2_iii (hsign : ∀ v w, 0 ≤ C.τ v * C.τ w) (a1 a0 : ℝ) (h : a1 ≤ a0) (aM : ℝ) :
@@ -242,7 +242,7 @@ theorem thm2_iii (hsign : ∀ v w, 0 ≤ C.τ v * C.τ w) (a1 a0 : ℝ) (h : a1 
         · exact le_refl 0)
     unfold G; linarith
 
-/-! ### Theorem 2 (iv): monotone treatment selection -/
+/-! ### Theorem 1 (iv): monotone treatment selection -/
 
 /-- Weighted averages: if every value carried by `w1` is at most every value carried by `w2`,
 the `w1`-average of `b` is at most its `w2`-average. -/
@@ -300,7 +300,7 @@ lemma slope_le_slope (hκ : ∀ v, 0 < C.κ v) (A B : Ω → Prop) [DecidablePre
     by_contra hn; unfold wt at hu; rw [if_neg hn] at hu; exact lt_irrefl 0 hu
   exact hAB v u hAv hBu
 
-/-- **Theorem 2 (iv).** Arms `M`, `M − 1`, `M − 2` have thresholds `c < b < a`, each friction
+/-- **Theorem 1 (iv).** Arms `M`, `M − 1`, `M − 2` have thresholds `c < b < a`, each friction
 stops someone, and someone uses AI in arm `M`. If `β(v)` is monotone in `v`, then
 `E[g(Y(0),X)] ≥ θ_{M−1,M}` if arm `M − 1` lies below the line through arms `M − 2` and `M`,
 and `E[g(Y(0),X)] ≤ θ_{M−1,M}` if it lies above. -/
@@ -372,7 +372,7 @@ theorem thm2_iv (hκ : ∀ v, 0 < C.κ v)
 
 end Curve
 
-/-! ## Theorem 2 (ii) and Lemma `lem:setid`: participant level
+/-! ## Theorem 1 (ii) and Lemma D1 (`lem:setid`): participant level
 
 `U i` is AI use in arm `z` (`W(z)`), `G0 G1 S0 S1` are `g(Y(0),X)`, `g(Y(1),X)`, `S(0)`, `S(1)`.
 The detector condition of Appendix D enters only through four moments, which it implies:
@@ -408,7 +408,7 @@ lemma E_obs_split (p : Ω → ℝ) (U : Ω → Bool) (A B : Ω → ℝ) :
   refine Finset.sum_congr rfl (fun i _ => ?_)
   rcases Bool.eq_false_or_eq_true (U i) with h | h <;> simp [h]
 
-/-- **Equation (`eq:setmom`).** With `α = Pr{W(z) = 1}`, `A = E[g(Y(1),X) | W(z) = 1]`,
+/-- **Equation D1 (`eq:setmom`).** With `α = Pr{W(z) = 1}`, `A = E[g(Y(1),X) | W(z) = 1]`,
 `B = E[g(Y(0),X) | W(z) = 1]` and `μ = E[g(Y(0),X)]`:
 `S̄ = FPR + α (TPR − FPR)`, `Ḡ = μ + α (A − B)`, `H̄ = FPR (μ − α B) + TPR α A`. -/
 theorem setmom {p : Ω → ℝ} (hp : ∀ i, 0 ≤ p i) (hsum : ∑ i, p i = 1) (U : Ω → Bool)
@@ -441,7 +441,7 @@ theorem setmom {p : Ω → ℝ} (hp : ∀ i, 0 ≤ p i) (hsum : ∑ i, p i = 1) 
       simp only [α, B]; rw [eB]; linarith
     rw [this]; ring
 
-/-- **Lemma `lem:setid`.** `α = (S̄ − FPR)/(TPR − FPR)` and `A = (H̄ − FPR Ḡ)/(S̄ − FPR)`;
+/-- **Lemma D1 (`lem:setid`).** `α = (S̄ − FPR)/(TPR − FPR)` and `A = (H̄ − FPR Ḡ)/(S̄ − FPR)`;
 TPR cancels in `A`. -/
 theorem setid {p : Ω → ℝ} (hp : ∀ i, 0 ≤ p i) (hsum : ∑ i, p i = 1) (U : Ω → Bool)
     (G0 G1 S0 S1 : Ω → ℝ) (fpr tpr : ℝ) (hd : DetectorRates p U G0 G1 S0 S1 fpr tpr)
@@ -478,9 +478,9 @@ lemma condMean_mem {p : Ω → ℝ} (hp : ∀ i, 0 ≤ p i) (A : Ω → Prop) [D
   · rw [le_div_iff₀ hA]; linarith [key.1]
   · rw [div_le_iff₀ hA]; linarith [key.2]
 
-/-- **Theorem 2 (ii).** If `g ∈ [g_min, g_max]`, then
+/-- **Theorem 1 (ii).** If `g ∈ [g_min, g_max]`, then
 `E[g(Y(0),X)] ∈ [Ḡ + α (g_min − A), Ḡ + α (g_max − A)]`, where `α` and `A` are identified by
-Lemma `lem:setid`. (The nesting of the intervals across arms and the sharpness of the interval
+Lemma D1 (`lem:setid`). (The nesting of the intervals across arms and the sharpness of the interval
 of arm `M`, Appendix D, are not formalized.) -/
 theorem thm2_ii {p : Ω → ℝ} (hp : ∀ i, 0 ≤ p i) (hsum : ∑ i, p i = 1) (U : Ω → Bool)
     (G0 G1 S0 S1 : Ω → ℝ) (fpr tpr gmin gmax : ℝ) (hd : DetectorRates p U G0 G1 S0 S1 fpr tpr)
@@ -494,7 +494,7 @@ theorem thm2_ii {p : Ω → ℝ} (hp : ∀ i, 0 ≤ p i) (hsum : ∑ i, p i = 1)
   have hG' : armG p U G0 G1 = E p G0 + α * (A - condMean p (fun i => U i = true) G0) := hG
   constructor <;> nlinarith [hB.1, hB.2, hα]
 
-/-- **Lemma `lem:setid`, adjacent arms.** With nested arms `U' ≤ U` (Assumption A4(iii)),
+/-- **Lemma D1 (`lem:setid`), adjacent arms.** With nested arms `U' ≤ U` (Assumption 1(iii)),
 `(H̄_z − FPR Ḡ_z) − (H̄_{z+1} − FPR Ḡ_{z+1}) = (TPR − FPR) E[g(Y(1),X) 1{W(z)=1, W(z+1)=0}]`, so
 `A_{z,z+1} = (dH̄ − FPR dḠ)/dS̄` once divided by `dS̄ = (TPR − FPR)(α_z − α_{z+1})`. -/
 theorem setid_adjacent {p : Ω → ℝ} (hp : ∀ i, 0 ≤ p i) (hsum : ∑ i, p i = 1) (U U' : Ω → Bool)

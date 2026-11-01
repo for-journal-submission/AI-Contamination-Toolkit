@@ -1,10 +1,11 @@
-"""Bounds of Theorem 2(ii)-(iv) when the effect of AI is not homogeneous.
+"""Bounds of Theorem 1(ii)-(iv) when the effect of AI is not homogeneous.
 
 (ii) bounded outcome (Manski): needs TPR and a detector that errs at the same rates for
      everyone, whatever the answer. For every arm z,
      E[g(Y(0),X)] in [G_z + alpha_z (g_min - A_z), G_z + alpha_z (g_max - A_z)],
      with alpha_z = (S_z - FPR)/(TPR - FPR) and A_z = (H_z - FPR G_z)/(S_z - FPR), H_z = E[g S | z].
 (iii) monotone treatment response: G_0 < G_1 gives E[g(Y(0),X)] >= G_M, and G_0 > G_1 gives <= G_M.
+     G_0 = G_1 gives no direction, so (iii) bounds nothing.
 (iv) monotone treatment selection (M >= 2): arm M-1 below the line through arms M-2 and M
      gives E[g(Y(0),X)] >= theta_{M-1,M}; above gives <=.
 """
@@ -30,8 +31,9 @@ def _bounds_from_arms(A, fpr, tpr, gmin, gmax):
             Az = (arm.H - fpr * arm.G) / (arm.Sbar - fpr)
             rows[f"(ii) arm {z}"] = (arm.G + alpha * (gmin - Az), arm.G + alpha * (gmax - Az))
     lo, hi = np.full(K, -np.inf), np.full(K, np.inf)
-    up = A[0].G < A[1].G
-    rows["(iii) MTR"] = (np.where(up, A[M].G, -np.inf), np.where(up, np.inf, A[M].G))
+    # Only a strict difference between arms 0 and 1 reveals the direction; equal means bound nothing.
+    up, down = A[0].G < A[1].G, A[0].G > A[1].G
+    rows["(iii) MTR"] = (np.where(up, A[M].G, -np.inf), np.where(down, A[M].G, np.inf))
     if M >= 2:
         a, m, b = A[M - 2], A[M - 1], A[M]
         line = b.G + (a.G - b.G) * (m.Sbar - b.Sbar) / (a.Sbar - b.Sbar)
@@ -77,7 +79,7 @@ class BoundsResult:
 
 def bounds(y, s, z, fpr, tpr=None, gmin=0.0, gmax=1.0, n_boot=0, level=0.95, seed=0,
            categorical=None, categories=None):
-    """Bounds of Theorem 2(ii)-(iv) and their intersection.
+    """Bounds of Theorem 1(ii)-(iv) and their intersection.
 
     With `n_boot > 0`, each endpoint also gets a one-sided bootstrap confidence bound (the
     lower endpoint's lower quantile and the upper endpoint's upper quantile, each at

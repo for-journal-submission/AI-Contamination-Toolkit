@@ -22,10 +22,10 @@ fpr = ac.estimate_fpr(pre_ai_signals)                    # signals on answers wr
 
 ac.arm_table(y, s, z)                                    # the points of the contamination curve
 ac.first_stage(s, z)                                     # does the friction move the signal?
-iv = ac.friction_iv(y, s, z, fpr)                        # Theorem 2(i), with Wald and AR sets
+iv = ac.friction_iv(y, s, z, fpr)                        # Theorem 1(i), with Wald and AR sets
 print(iv)
 ac.compare(y, s, z, fpr)                                 # no correction vs delete flagged vs IV
-ac.bounds(y, s, z, fpr, tpr, n_boot=999)                 # Theorem 2(ii)-(iv)
+ac.bounds(y, s, z, fpr, tpr, n_boot=999)                 # Theorem 1(ii)-(iv)
 ac.plot_curve(y, s, z, fpr)
 ```
 
@@ -39,12 +39,12 @@ ac.plot_curve(y, s, z, fpr)
 |---|---|---|
 | Design | `assign_arms` randomizes the friction. `plan_sample_size` and `iv_se` give the N for a target standard error. | Section 3 |
 | Detector | `estimate_fpr` uses pre-AI answers and `estimate_tpr` uses AI answers. `threshold_for_fpr` and `flag` turn a detector's scores into signals. | Section 2 |
-| Estimate | `friction_iv` gives the IV estimate from any two arms (default the two strongest), a delta-method standard error, and the Anderson–Rubin set, which stays valid when the first stage is weak. | Theorem 2(i), Theorem 3 |
-| Compare | `no_correction`, `delete_flagged` and `compare`. `deletion_bias` gives the two terms of Theorem 1 in simulated data. | Theorem 1, Table 2 |
+| Estimate | `friction_iv` gives the IV estimate from any two arms (default the two strongest), a delta-method standard error, and the Anderson–Rubin set, which stays valid when the first stage is weak. | Theorem 1(i), Theorem 2 |
+| Compare | `no_correction`, `delete_flagged` and `compare`. `deletion_bias` gives the two terms of Proposition 1 in simulated data. | Proposition 1, Table 2 |
 | Diagnose | `arm_table`, `first_stage`, `homogeneity_test` (is a middle arm on the line?) and `plot_curve`. | Section 3, Figure 1 |
-| Bounds | `bounds` covers bounded outcomes (Manski, needs TPR and a detector that errs at the same rates for every participant and answer), monotone treatment response and monotone treatment selection, plus their intersection and bootstrap confidence bounds. | Theorem 2(ii)–(iv) |
-| AI coding | `human_coding_probs` chooses which answers humans code. `draw_human_coding` draws them. `pseudo_outcome` builds the corrected outcome to pass to `friction_iv`. | Lemma coding |
-| No instrument | `latent_ipw` fits a latent class model and returns IPW weights. It needs at least two questions that AI does not write for the participant (`ai_free`). | Theorem latent |
+| Bounds | `bounds` covers bounded outcomes (Manski, needs TPR and a detector that errs at the same rates for every participant and answer), monotone treatment response and monotone treatment selection, plus their intersection and bootstrap confidence bounds. | Theorem 1(ii)–(iv) |
+| AI coding | `human_coding_probs` chooses which answers humans code. `draw_human_coding` draws them. `pseudo_outcome` builds the corrected outcome to pass to `friction_iv`. | Lemma H1 |
+| No instrument | `latent_ipw` fits a latent class model and returns IPW weights. It needs at least two questions that AI does not write for the participant (`ai_free`). | Theorem 3 |
 | Data | `simulate_batball` gives a simulated survey. `batball_population` gives the exact population of Figure 1. `pre_ai_signals` gives a pre-AI sample. | Figure 1 |
 
 ## Tests
@@ -65,15 +65,17 @@ They also check the following:
 - The planned N gives the planned standard error.
 - The coding correction is unbiased with a bad LLM.
 - The latent class IPW recovers the truth.
+- Equal mean answers in arms 0 and 1 give no monotone-response bound.
+- The human-coding probabilities spend the whole budget after the caps at 1 and at the floor.
 
 ## Scope
 
-This is a prototype. Inference for the bounds uses a bootstrap, not the Anderson–Rubin union of Theorem 3, and `latent_ipw` handles discrete answers without covariates (fit it within strata of X).
+This is a prototype. Inference for the bounds of Theorem 1(ii)–(iv) uses a bootstrap, not the Anderson–Rubin union of Theorem 2. For Theorem 1(i), `friction_iv` gives both Wald and Anderson–Rubin sets. Also, and `latent_ipw` handles discrete answers without covariates (fit it within strata of X).
 
 ## The paper's computational appendix
 
 `paper/` holds what the paper itself needs (see `paper/README.md`).
-- `paper/lean/`: Lean 4 proofs of the theorems and of the numbers in Figure 1.
+- `paper/lean/`: Lean 4 proofs of the exact algebra behind the paper's results and of the numbers in Figure 1. `paper/README.md` lists what is not formalized.
 - `paper/replication/`: the code that rebuilds the Glassdoor test bed and reproduces Table 2.
 
 License: MIT.

@@ -50,9 +50,9 @@ def _gaps(A):
 def homogeneity_test(y, s, z, n_boot=999, seed=0, categorical=None, categories=None):
     """With three or more arms, test that every middle arm lies on the line through its neighbors.
 
-    Under homogeneity (Theorem 2(i)) all arms lie on one line. A gap far from zero rejects it;
-    its sign says whether the curve is convex (arm below) or concave (arm above), which
-    Theorem 2(iv) uses. Standard errors come from a bootstrap within arms.
+    Under homogeneity (Theorem 1(i)) all arms lie on one line. A gap far from zero rejects it.
+    If beta(v) is monotone, its sign says whether the curve is convex (arm below) or concave
+    (arm above), which Theorem 1(iv) uses. Standard errors come from a bootstrap within arms.
     """
     Y, S, z, labels = prepare(y, s, z, categorical, categories)
     if z.max() < 2:
