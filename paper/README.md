@@ -40,7 +40,7 @@ lake env lean AxiomAudit.lean   # prints the axioms
 | Theorem latent (a), IPW | `Latent.latent_a`, `Latent.latent_a_unbiased` | `ThmLatent.lean` |
 | Theorem latent (b), expectation given observed data | `Latent.latent_b`, `Latent.latent_b_formula` | `ThmLatent.lean` |
 | Lemma coding (Appendix H) | `coding_a`, `coding_a_arm` | `LemCoding.lean` |
-| Figure 1 example (Appendix D): arms, `θ_{01} = 0.47`, `θ_{12} = 0.49`, slopes, bounds, MTS | `Examples.fig_arms`, `fig_theta`, `fig_slopes`, `fig_manski`, `fig_below`, `fig_mts` | `Examples.lean` |
+| Figure 1 example (Appendix D): arms, `θ_{01} = 0.45`, `θ_{12} = 0.49`, slopes, bounds, MTS | `Examples.fig_arms`, `fig_theta`, `fig_slopes`, `fig_manski`, `fig_below`, `fig_mts` | `Examples.lean` |
 
 Not formalized:
 

@@ -4,10 +4,10 @@
 
 | Quantity | Paper | Package |
 |---|---|---|
-| arm 0 (flagged, wrong) | (0.34, 0.35) | (0.34, 0.35) |
+| arm 0 (flagged, wrong) | (0.34, 0.39) | (0.34, 0.39) |
 | arm 1 (flagged, wrong) | (0.18, 0.43) | (0.18, 0.43) |
 | arm 2 (flagged, wrong) | (0.14, 0.46) | (0.14, 0.46) |
-| theta_01 | 0.47 | 0.47 |
+| theta_01 | 0.45 | 0.45 |
 | theta_12 | 0.49 | 0.49 |
 | bound (ii) arm 1 | [0.43, 0.53] | [0.43, 0.53] |
 | bound (ii) arm 2 | [0.46, 0.51] | [0.46, 0.51] |
@@ -39,5 +39,5 @@ tests/test_paper_numbers.py::test_theta PASSED                           [ 76%]
 tests/test_paper_numbers.py::test_bounds PASSED                          [ 84%]
 tests/test_paper_numbers.py::test_mts_side PASSED                        [ 92%]
 tests/test_plot.py::test_plot_runs PASSED                                [100%]
-============================== 13 passed in 4.11s ==============================
+============================== 13 passed in 7.76s ==============================
 ```

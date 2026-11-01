@@ -10,11 +10,11 @@ b = ac.bounds(pop.wrong, pop.flagged, pop.arm, fpr=0.1, tpr=0.9).rows
 print("# Test results\n")
 print("## Paper numbers (exact population of Figure 1)\n")
 print("| Quantity | Paper | Package |\n|---|---|---|")
-for z, (s, g) in enumerate(zip([0.34, 0.18, 0.14], [0.35, 0.43, 0.46])):
+for z, (s, g) in enumerate(zip([0.34, 0.18, 0.14], [0.39, 0.43, 0.46])):
     print(f"| arm {z} (flagged, wrong) | ({s}, {g}) | ({t.flagged[z]:.2f}, {t['mean[mean]'][z]:.2f}) |")
 th01 = ac.friction_iv(pop.wrong, pop.flagged, pop.arm, 0.1, arms=(0, 1)).estimate[0]
 th12 = ac.friction_iv(pop.wrong, pop.flagged, pop.arm, 0.1).estimate[0]
-print(f"| theta_01 | 0.47 | {th01:.2f} |\n| theta_12 | 0.49 | {th12:.2f} |")
+print(f"| theta_01 | 0.45 | {th01:.2f} |\n| theta_12 | 0.49 | {th12:.2f} |")
 for name, paper in [("(ii) arm 1", "[0.43, 0.53]"), ("(ii) arm 2", "[0.46, 0.51]"), ("intersection", "[0.49, 0.51]")]:
     lo, hi = b[name]
     print(f"| bound {name} | {paper} | [{lo[0]:.2f}, {hi[0]:.2f}] |")

@@ -7,8 +7,8 @@ are three arms of friction. As in Figure 1 of the paper:
     type            share   uses AI in arms   wrong without AI
     always-taker      5%    0, 1, 2           80%
     stopped by 2      5%    0, 1              60%
-    complier         20%    0                 40%
-    never-taker      70%    none              50%
+    complier         20%    0                 20%
+    never-taker      70%    none              39 of 70
 
 so 30, 10, and 5% use AI in arms 0, 1, and 2, and the truth is 50%. The detector flags human
 answers at FPR = 0.1 and AI answers at TPR = 0.9.
@@ -18,7 +18,7 @@ import numpy as np
 import pandas as pd
 
 TYPES = pd.DataFrame({"share": [0.05, 0.05, 0.20, 0.70], "uses_ai_up_to_arm": [2, 1, 0, -1],
-                      "wrong": [0.8, 0.6, 0.4, 0.5]},
+                      "wrong": [0.8, 0.6, 0.2, 39 / 70]},
                      index=["always-taker", "stopped by 2", "complier", "never-taker"])
 
 
@@ -48,7 +48,7 @@ def simulate_batball(n=3000, arm_shares=(1 / 3, 1 / 3, 1 / 3), wrong=None, ai_wr
 def batball_population(n_per_arm=100_000):
     """Exact version of Figure 1: every arm holds the population shares with no sampling noise
     (each type, answer and signal cell has exactly its expected count). Arm means then equal
-    the population values of the paper: (0.34, 0.35), (0.18, 0.43), (0.14, 0.46)."""
+    the population values of the paper: (0.34, 0.39), (0.18, 0.43), (0.14, 0.46)."""
     rows = []
     for z in range(3):
         for (_, t) in TYPES.iterrows():

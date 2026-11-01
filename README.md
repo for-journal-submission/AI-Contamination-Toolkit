@@ -54,8 +54,8 @@ pip install -e ".[test]" && pytest
 ```
 
 The tests reproduce the paper's numbers:
-- arms (0.34, 0.35), (0.18, 0.43) and (0.14, 0.46)
-- θ01 = 0.47 and θ12 = 0.49
+- arms (0.34, 0.39), (0.18, 0.43) and (0.14, 0.46)
+- θ01 = 0.45 and θ12 = 0.49
 - bounds [0.43, 0.53] and [0.46, 0.51], and their intersection [0.49, 0.51]
 
 They also check the following:
