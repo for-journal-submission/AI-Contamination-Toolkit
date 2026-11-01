@@ -6,7 +6,7 @@ rating groups. The friction stops 80% of them. FPR is estimated from 300 pre-AI 
   no correction   share of answers coded as the theme
   deletion        share among the answers the detector does not flag
   IV design       theta_01 = G1 - (G0 - G1)(S1 - FPR)/(S0 - S1), with a delta-method interval
-Bias, error, and coverage are averaged over the 18 theme shares (six themes in three questions). Bias and error
+Bias, RMSE, and coverage are averaged over the 18 theme shares (six themes in three questions). Bias and RMSE
 are relative to the true share.
 
     python3 table2.py        # about 30 s; prints the rows of Table 2
@@ -57,7 +57,7 @@ def survey(pop, n, rng):
 
 LABELS = {"none": "No correction", "delete": "Delete flagged answers", "iv": "IV Design"}
 for panel, n in (("A", 3000), ("B", 6000)):
-    print(f"% Panel {panel}: N = {n:,}; columns TPR/FPR 89/10, 92/15, 94/21, 64/15; Bias | Error | Coverage (%)")
+    print(f"% Panel {panel}: N = {n:,}; columns TPR/FPR 89/10, 92/15, 94/21, 64/15; Bias | RMSE | Coverage (%)")
     cells = {k: np.zeros((3, len(COLUMNS))) for k in LABELS}
     for c, (detector, evade) in enumerate(COLUMNS):
         stats = {k: [[], [], []] for k in LABELS}
@@ -70,7 +70,7 @@ for panel, n in (("A", 3000), ("B", 6000)):
                 est = np.array([r[0][k] for r in runs])
                 se = np.array([r[1][k] for r in runs])
                 stats[k][0].append(np.abs(est.mean(0) - truth) / truth)
-                stats[k][1].append(np.abs(est - truth).mean(0) / truth)
+                stats[k][1].append(np.sqrt(((est - truth) ** 2).mean(0)) / truth)
                 stats[k][2].append((np.abs(est - truth) <= Z95 * se).mean(0))
         for k in LABELS:
             cells[k][:, c] = [100 * np.concatenate(s).mean() for s in stats[k]]
